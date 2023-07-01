@@ -1,6 +1,6 @@
 {
-  "name": "Blazor.Minimal",
-  "short_name": "Blazor.Minimal",
+  "name": "Blazor.Minimal.Example",
+  "short_name": "Blazor.Minimal.Example",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",

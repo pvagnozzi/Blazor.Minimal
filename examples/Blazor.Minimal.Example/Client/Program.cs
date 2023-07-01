@@ -1,4 +1,4 @@
-using Blazor.Minimal.Client;
+using Blazor.Minimal.Example.Client;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
