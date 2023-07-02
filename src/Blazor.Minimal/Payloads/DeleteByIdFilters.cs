@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Blazor.Minimal.Example.Server.Infrastructure.Modules.Payloads;
+namespace Blazor.Minimal.Modules.Payloads;
 
 public record DeleteByIdFilter : QueryFilters
 {

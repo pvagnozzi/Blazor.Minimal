@@ -1,4 +1,4 @@
-﻿namespace Blazor.Minimal.Example.Server.Infrastructure.Modules;
+﻿namespace Blazor.Minimal.Modules;
 
 public interface IModuleMessage
 {

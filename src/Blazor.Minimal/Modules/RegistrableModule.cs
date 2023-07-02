@@ -1,4 +1,6 @@
-﻿namespace Blazor.Minimal.Example.Server.Infrastructure.Modules;
+﻿using Microsoft.AspNetCore.Routing;
+
+namespace Blazor.Minimal.Modules;
 
 public class RegistrableModule : IRegistrableModule
 {

@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Blazor.Minimal.Example.Server.Infrastructure.Modules;
+namespace Blazor.Minimal.Modules;
 
 public class ModuleManager
 {
@@ -21,15 +23,23 @@ public class ModuleManager
         Modules.Add(type);
     }
 
-    public void AddModulesFromAssembly(Assembly assembly)
+    public void AddModules(Assembly assembly)
     {
         var moduleTypes = assembly
             .GetTypes()
-            .Where(x => x.IsAssignableTo(typeof(IRegistrableModule)));
+            .Where(x => x is { IsClass: true, IsAbstract: false } && x.IsAssignableTo(typeof(IRegistrableModule)));
 
         foreach (var moduleType in moduleTypes)
         {
             AddModule(moduleType);
+        }
+    }
+
+    public void AddModules(IEnumerable<Assembly> assemblies)
+    {
+        foreach (var assembly in assemblies)
+        {
+            AddModules(assembly);
         }
     }
 

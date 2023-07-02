@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Blazor.Minimal.Example.Server.Infrastructure.Modules.Payloads;
+namespace Blazor.Minimal.Modules.Payloads;
 
 public record ModuleResponse : IModuleResponse
 {

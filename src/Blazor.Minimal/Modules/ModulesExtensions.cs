@@ -1,15 +1,20 @@
-﻿using System.Diagnostics;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace Blazor.Minimal.Example.Server.Infrastructure.Modules;
+namespace Blazor.Minimal.Modules;
 
 public static class ConfigurationExtensions
 {
     internal static ModuleManager ModuleManager { get; } = new();
 
-    public static IServiceCollection AddModules(this IServiceCollection services, string[]? origins = null, bool isDevelopment = false)
+    public static IServiceCollection AddModules(this IServiceCollection services,
+        IEnumerable<Assembly>? assemblies = null, string[]? origins = null, bool isDevelopment = false)
     {
-        ModuleManager.AddModulesFromAssembly(typeof(ConfigurationExtensions).Assembly);
+        assemblies ??= new[] { Assembly.GetCallingAssembly() };
+        ModuleManager.AddModules(assemblies);
         ModuleManager.RegisterModules(services);
 
         return services
@@ -21,18 +26,14 @@ public static class ConfigurationExtensions
                 options.AddPolicy("publicapi", o =>
                 {
                     var builder = o.AllowAnyHeader().AllowAnyMethod();
-                    if (isDevelopment)
+                    var or = origins?.ToArray() ?? Array.Empty<string>();
+                    if (isDevelopment && !or.Any())
                     {
                         builder.AllowAnyOrigin();
                     }
                     else
                     {
-                        if (!(origins?.Any() ?? false))
-                        {
-                            throw new InvalidOperationException("No valid listening urls configured");
-                        }
-
-                        builder.WithOrigins(origins);
+                        builder.WithOrigins(or);
                     }
                 });
             });
@@ -49,7 +50,6 @@ public static class ConfigurationExtensions
         return ModuleManager.MapEndPoints(application);
     }
 
-    [DebuggerStepThrough]
     public static RouteHandlerBuilder SetOpenApi(this RouteHandlerBuilder builder, string[] tags, string? name = null,
         string? displayName = null, string? description = null, string? summary = null, string? securityPolicy = null,
         params object[] metadata)
@@ -57,6 +57,15 @@ public static class ConfigurationExtensions
         var result = builder.WithOpenApi()
             .RequireCors("publicapi")
             .WithTags(tags);
+
+        if (securityPolicy is not null)
+        {
+            builder.RequireAuthorization(securityPolicy);
+            if (securityPolicy == string.Empty)
+            {
+                builder.RequireAuthorization();
+            }
+        }
 
         if (name is not null)
         {
@@ -86,11 +95,11 @@ public static class ConfigurationExtensions
         return result;
     }
 
-    [DebuggerStepThrough]
     public static RouteHandlerBuilder SetOpenApi(this RouteHandlerBuilder builder, string groupName,
         string? name = null,
         string? displayName = null, string? description = null, string? summary = null, string? securityPolicy = null,
         params object[] metadata) => builder.SetOpenApi(new[] { groupName }, name, displayName, description, summary,
         securityPolicy, metadata);
+
 }
 

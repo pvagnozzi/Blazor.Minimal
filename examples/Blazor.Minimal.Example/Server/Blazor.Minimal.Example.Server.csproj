@@ -17,8 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Blazor.Minimal\Blazor.Minimal.csproj" />
     <ProjectReference Include="..\Client\Blazor.Minimal.Example.Client.csproj" />
     <ProjectReference Include="..\Shared\Blazor.Minimal.Example.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
   </ItemGroup>
 
 

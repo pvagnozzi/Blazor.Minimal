@@ -1,9 +1,10 @@
 ﻿using System.Net;
 using System.Text.Json;
-using Blazor.Minimal.Example.Server.Infrastructure.Modules.Payloads;
+using Blazor.Minimal.Modules.Payloads;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
-namespace Blazor.Minimal.Example.Server.Infrastructure.Modules;
+namespace Blazor.Minimal.Modules;
 
 public class ExceptionHandler
 {
